@@ -4,7 +4,7 @@ on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '14,27,43,56 * * * *'  # Runs every 14th, 27th, 43rd, and 56th minute
+    - cron: '7,21,39,48 * * * *' 
 
 jobs:
   track-stock:
