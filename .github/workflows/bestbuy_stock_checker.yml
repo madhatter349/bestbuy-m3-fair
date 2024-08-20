@@ -1,0 +1,58 @@
+name: Best Buy Stock Tracker
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '14,27,43,56 * * * *'  # Runs every 14th, 27th, 43rd, and 56th minute
+
+jobs:
+  track-stock:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run stock tracker
+        env:
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: python bestbuy_stock_checker.py
+
+      - name: Display debug log
+        run: cat debug.log
+        if: always()
+
+      - name: Upload debug log
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: debug-log
+          path: debug.log
+
+      - name: Upload stock change results
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: stock-change-result
+          path: stock_change_result.json
+
+      - name: Commit and push if there are changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add bestbuy_stock.db
+          git commit -m "Update stock data" || echo "No changes to commit"
+          git push
