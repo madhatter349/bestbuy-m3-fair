@@ -135,6 +135,10 @@ def check_for_changes():
     
     return changes
 
+def save_stock_changes(changes):
+    with open('stock_change_result.json', 'w') as f:
+        json.dump(changes, f, indent=2)
+
 def send_email(changes):
     headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -153,7 +157,7 @@ def send_email(changes):
         """
         subject_title = f"Stock Change for SKU {change['sku']}"
         data = {
-            'to': 'your_email@example.com',  # Replace with your email address
+            'to': 'madhatter349@gmail.com',  # Replace with your email address
             'subject': subject_title,
             'body': body_content,
             'type': 'text/html'
