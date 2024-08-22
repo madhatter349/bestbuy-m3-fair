@@ -54,8 +54,8 @@ def fetch_bestbuy_data():
         'onlyBestBuyLocations': True,
         'items': [
             {
-                'sku': '6565837',
-                'condition': '0',
+                'sku': '6565832',
+                'condition': '2',
                 'quantity': 1,
                 'itemSeqNumber': '5',
                 'reservationToken': None,
